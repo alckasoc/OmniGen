@@ -311,9 +311,21 @@ class OmniGen(nn.Module, PeftAdapterMixin):
         return latents, num_tokens, shapes
 
     
-    def forward(self, x, timestep, input_ids, input_img_latents, input_image_sizes, attention_mask, position_ids, padding_latent=None, past_key_values=None, return_past_key_values=True, offload_model:bool=False):
-        """
-        
+    def forward(
+        self,
+        x,
+        timestep,
+        input_ids,
+        input_img_latents,
+        input_image_sizes,
+        attention_mask,
+        position_ids,
+        padding_latent=None,
+        past_key_values=None,
+        return_past_key_values=True,
+        offload_model:bool=False
+    ):
+        """        
         """
         input_is_list = isinstance(x, list)
         x, num_tokens, shapes = self.patch_multiple_resolutions(x, padding_latent)
@@ -335,7 +347,13 @@ class OmniGen(nn.Module, PeftAdapterMixin):
         else:
             input_emb = torch.cat([time_token, x], dim=1)
 
-        output = self.llm(inputs_embeds=input_emb, attention_mask=attention_mask, position_ids=position_ids, past_key_values=past_key_values, offload_model=offload_model)
+        output = self.llm(
+            inputs_embeds=input_emb, 
+            attention_mask=attention_mask, 
+            position_ids=position_ids, 
+            past_key_values=past_key_values, 
+            offload_model=offload_model
+        )
         output, past_key_values = output.last_hidden_state, output.past_key_values
         if input_is_list:
             image_embedding = output[:, -max(num_tokens):]

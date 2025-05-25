@@ -42,9 +42,9 @@ def training_losses(model, x1, model_kwargs=None, snr_type='uniform', patch_weig
         dims = [1] * (len(x1.size()) - 1)
         t_ = t.view(t.size(0), *dims)
         xt = t_ * x1 + (1 - t_) * x0
-        ut = x1 - x0
+        ut = x1 - x0  # (B, C, H, W)
 
-    model_output = model(xt, t, **model_kwargs)
+    model_output = model(xt, t, **model_kwargs)  # (B, C, H, W) -> (B, L, D)
 
     terms = {}
 

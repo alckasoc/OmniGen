@@ -227,7 +227,16 @@ def main(args):
                 #             pass
                 #     patch_weight.append(w)
 
-                model_kwargs = dict(input_ids=data['input_ids'], input_img_latents=input_pixel_values, input_image_sizes=data['input_image_sizes'], attention_mask=data['attention_mask'], position_ids=data['position_ids'], padding_latent=data['padding_images'], past_key_values=None, return_past_key_values=False)
+                model_kwargs = dict(
+                    input_ids=data['input_ids'],
+                    input_img_latents=input_pixel_values,
+                    input_image_sizes=data['input_image_sizes'],
+                    attention_mask=data['attention_mask'],
+                    position_ids=data['position_ids'],
+                    padding_latent=data['padding_images'],
+                    past_key_values=None,
+                    return_past_key_values=False
+                )
                 
                 loss_dict = training_losses(model, output_images, model_kwargs)
                 loss = loss_dict["loss"].mean()
